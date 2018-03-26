@@ -35,16 +35,20 @@ router.post('/login', (req, res, next) => {
     console.log('log in attempt');
 });
 
-//Posts
-// router.get('/posting', (req, res, next) => {
-//     if (req.user) {
-//         passport.authenticate('local', {
-//             successRedirect: '/users/logpostsc',
-//             failureRedirect: '/users/logpostfail'
-//         })(req, res, next);
-//         console.log('posting attempt');
-//     }
-// });
+//Posting
+router.post('/posting', (req, res) => {
+    db.Post.create({
+        title: req.body.title,
+        UserId: req.user.id
+    });
+    req.flash('success_msg', 'You have successfully created your post!');
+    res.redirect('dash');
+    console.log('hello');
+});
+
+router.get('/posting', (req, res) => {
+    res.render('posting');
+});
 
 //Home
 router.get('/dash', (req, res) => {
@@ -59,7 +63,6 @@ router.get('/logout', (req, res) => {
     console.log('logged out');
 });
 
-
 //Failure
 router.get('/failure', (req, res) => {
     req.flash('error_msg', 'Something went wrong! Please try again.');
@@ -69,8 +72,7 @@ router.get('/failure', (req, res) => {
 
 //Success
 router.get('/success', (req, res, next) => {
-    req.flash('success_msg', 'You can begin posting now!');
-    res.redirect('posting');
+    res.render('posting');
     console.log('log in success');
 });
 
