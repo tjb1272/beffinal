@@ -8,6 +8,7 @@ const session = require('cookie-session');
 const passport = require('passport');
 const sqlite = require('sqlite3')
 const Sequelize = require('sequelize');
+const https = require('https');
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -30,7 +31,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Express Session
-app.use(session({ secret: 'secret' }));
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
 
 //Passport Init
 require('./config/passport')(passport);
